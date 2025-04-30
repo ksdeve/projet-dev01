@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Checkout SCM') {
             steps {
-                sh 'git clone https://github.com/ksdeve/projet-dev01.git'
+                git branch: 'main', credentialsId: 'id-user-github', url: 'https://github.com/ksdeve/projet-dev01.git'
             }
         }
          stage('Build image docker') {
