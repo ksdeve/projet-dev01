@@ -22,10 +22,12 @@ pipeline {
          stage('Deploiement application') {
             steps {
                 script{
-                    sh 'docker stop myapp'                  
-                    sh 'docker rm myapp'                  
-                    sh 'docker run -d --name myapp --hostname myapp -p 8088:80 myapp-image'
-                    sh 'docker exec myapp "ifconfig"'
+                   // Nettoyage des anciens containers (s'ils existent)
+                    sh 'docker ps -a | grep myapp && docker rm -f myapp || true'
+                    sh 'docker rmi -f myapp-image || true'
+                    
+                    // Déployer le conteneur
+                    sh 'docker run -d --name myapp -p 8088:80 myapp-image'
                     sh 'docker inspect -f "{{ .NetworkSettings.IPAddress }}" myapp'
                 }
             }
