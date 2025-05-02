@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    parameters {
+        choice(name: 'DEPLOY', choices: ['false', 'true'], description: 'Voulez-vous déployer l\'application ?')
+    }
     stages {
         stage('Supprimer le workspace') {
             steps {
