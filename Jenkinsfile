@@ -19,13 +19,21 @@ pipeline {
                 }
             }
         }
-         stage('Deploiement application') {
+
+        // Etape 3 - Nettoyer les containers et images existants + déployer
+        stage('Nettoyage Docker et Déploiement') {
+            when {
+                expression { return params.DEPLOY == 'true' }
+            }
             steps {
-                script{
-                    sh 'docker stop monapp'                  
-                    sh 'docker rm monapp'                  
-                    sh 'docker run -d --name monapp --hostname monapp -p 8099:80 myapp-image'
-                    sh 'docker exec monapp "ifconfig"'
+                script {
+                    // Nettoyage des anciens containers/images
+                    sh 'docker rm -f myapp || true'
+                    sh 'docker rmi -f myapp-image || true'
+                    
+                    // Déployer le conteneur
+                    sh 'docker run -d --name myapp -p 8088:80 myapp-image'
+                    sh 'docker inspect -f "{{ .NetworkSettings.IPAddress }}" myapp'
                 }
             }
         }
