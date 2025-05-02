@@ -1,5 +1,8 @@
 pipeline {
     agent any
+     parameters {
+        choice(name: 'DEPLOY', choices: ['false', 'true'], description: 'Voulez-vous déployer l\'application ?')
+    }
     stages {
         stage('Supprimer le workspace') {
             steps {
@@ -20,6 +23,9 @@ pipeline {
             }
         }
          stage('Deploiement application') {
+            when {
+                expression { return params.DEPLOY == 'true' }
+            }
             steps {
                 script{
                    // Nettoyage des anciens containers (s'ils existent)
