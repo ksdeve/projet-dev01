@@ -27,7 +27,7 @@ pipeline {
                     sh 'docker rmi -f myapp-image || true'
                     
                     // Déployer le conteneur
-                    sh 'docker run -d --name myapp -p 8088:80 myapp-image'
+                    sh 'docker run -d --name myapp -p 8088:80 kevins:myapp-image'
                     sh 'docker inspect -f "{{ .NetworkSettings.IPAddress }}" myapp'
                 }
             }
